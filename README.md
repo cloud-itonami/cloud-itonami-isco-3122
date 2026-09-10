@@ -62,17 +62,17 @@ human-in-the-loop interrupt/resume via checkpointing.
                                            +-> :hold               (:hard? true)
 ```
 
-- `src/manufacturing_supervision/store.cljc` — `Store` protocol +
+- `src/manufacturing_supervision/store.kotoba` — `Store` protocol +
   `MemStore`: registered lines, committed records, an append-only
   audit ledger.
-- `src/manufacturing_supervision/advisor.cljc` — `Advisor` protocol;
+- `src/manufacturing_supervision/advisor.kotoba` — `Advisor` protocol;
   `mock-advisor` (deterministic, default) proposes a supervision
   operation from a request; `llm-advisor` wraps a
   `langchain.model/ChatModel` — either way the advisor only ever
   produces a `:propose`-effect proposal, never a committed record, and
   LLM parse failures always yield `confidence 0.0` (forces escalation,
   never fabricated confidence).
-- `src/manufacturing_supervision/governor.cljc` —
+- `src/manufacturing_supervision/governor.kotoba` —
   `ManufacturingSupervisionGovernor/check`: a pure function, wired as
   its own `:govern` node. Hard invariants (unregistered line, a
   proposal whose `:effect` isn't `:propose`) always route to `:hold`.
@@ -83,7 +83,7 @@ human-in-the-loop interrupt/resume via checkpointing.
   (`actor/approve!`), matching the README's robotics-premise statement
   that clearing a safety-hold on production equipment and overriding a
   quality-control failure always require human sign-off.
-- `src/manufacturing_supervision/actor.cljc` — `build-graph`,
+- `src/manufacturing_supervision/actor.kotoba` — `build-graph`,
   `run-request!`, `approve!`: the `langgraph.graph/state-graph` wiring
   itself.
 
